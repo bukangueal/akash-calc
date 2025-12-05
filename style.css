@@ -1,19 +1,19 @@
-/* 1. CSS Reset Sederhana untuk konsistensi antar browser */
+/* CSS Reset Sederhana */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* 2. Gaya Body dan Container */
+/* Gaya Body dan Container */
 body {
     font-family: Arial, sans-serif;
-    background-color: #121212; /* Latar belakang gelap */
-    color: #f0f0f0; /* Warna teks terang */
+    background-color: #121212;
+    color: #f0f0f0;
     padding: 20px;
     display: flex;
-    justify-content: center; /* Rata tengah horizontal */
-    min-height: 100vh; /* Pastikan tinggi penuh viewport */
+    justify-content: center;
+    min-height: 100vh;
 }
 
 .container {
@@ -31,7 +31,11 @@ h1 {
     margin-bottom: 25px;
 }
 
-/* 3. Gaya Bagian Pelanggaran (Offence List) */
+h4 {
+    color: #ffffff;
+}
+
+/* Gaya Bagian Pelanggaran (Offence List) */
 #offence-list {
     margin-bottom: 20px;
 }
@@ -62,7 +66,7 @@ h1 {
     transition: transform 0.3s ease;
 }
 
-/* 4. Konten yang Dapat Dibuka/Tutup (Accordion) */
+/* Konten yang Dapat Dibuka/Tutup (Accordion) */
 .offence-content {
     background-color: #242424;
     max-height: 0;
@@ -71,13 +75,13 @@ h1 {
 }
 
 .offence-content.active {
-    padding: 10px 15px 0 15px; /* Sesuaikan padding agar terlihat rapi */
+    padding: 10px 15px 0 15px;
 }
 
 .offence {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Pastikan rata atas untuk teks panjang */
+    align-items: flex-start;
     padding: 10px 0;
     border-bottom: 1px dashed #3a3a3a;
     font-size: 0.9em;
@@ -85,11 +89,11 @@ h1 {
 
 .offence:last-child {
     border-bottom: none;
-    padding-bottom: 10px; /* Tambahkan padding bawah untuk elemen terakhir */
+    padding-bottom: 10px;
 }
 
 .offence label {
-    flex: 1 1 65%; /* Beri ruang lebih banyak untuk nama pelanggaran */
+    flex: 1 1 65%;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -102,14 +106,14 @@ h1 {
 }
 
 .offence span {
-    flex: 0 0 35%; /* Beri ruang spesifik untuk denda/waktu */
+    flex: 0 0 35%;
     color: #a0a0a0;
     text-align: right;
-    white-space: nowrap; /* Jangan memutus baris informasi denda */
+    white-space: nowrap;
     font-size: 0.85em;
 }
 
-/* 5. Gaya Tombol Reset */
+/* Gaya Tombol Reset dan Umum */
 button {
     background-color: #cf6679;
     color: white;
@@ -127,13 +131,19 @@ button:hover {
     background-color: #b00020;
 }
 
-/* 6. Gaya Bagian Hasil (Result) */
+/* Gaya Bagian Hasil (Result) */
 .result {
     margin-top: 30px;
     padding: 15px;
     background-color: #2c2c2c;
     border-radius: 8px;
     border-left: 5px solid #03dac6;
+}
+
+.result hr {
+    border: 0; 
+    border-top: 1px solid #2c3e50; 
+    margin: 8px 0;
 }
 
 .result p {
@@ -143,15 +153,50 @@ button:hover {
     justify-content: space-between;
 }
 
-.result b {
-    font-weight: normal;
-}
-
 #totalFine, #totalTime, #totalImpound {
     font-weight: bold;
     color: #03dac6;
 }
 
-#selectedOffences h4 {
-    color: #ffffff;
+#offenceList {
+    list-style: none;
+    padding-left: 10px;
+    margin: 0;
+    color: #ccc;
+}
+
+/* Gaya Panel Copy */
+.copy-panel {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #242424;
+    border-radius: 8px;
+}
+
+.copy-panel h4 {
+    margin: 0 0 10px; 
+    color: #bb86fc;
+}
+
+#copyableList {
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    white-space: pre-wrap; /* Mempertahankan format baris baru */
+    font-family: monospace;
+    font-size: 0.9em;
+    color: #03dac6;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.copy-button {
+    background-color: #03dac6;
+    color: #1e1e1e;
+    font-weight: bold;
+}
+
+.copy-button:hover {
+    background-color: #05d1c0;
 }
