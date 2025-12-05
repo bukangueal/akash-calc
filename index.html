@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-initial-scale=1.0" />
     <title>Monarch State Criminal Code</title>
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -13,6 +13,21 @@
         <div id="offence-list"></div>
         <button onclick="resetCalculator()">Reset Calculator</button>
 
+        <div id="copy-panel" style="margin-top: 20px; display: none;">
+          <h4 style="margin: 0 0 10px; color: #bb86fc;">Copyable Summary:</h4>
+          <div id="copyableList" style="
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #03dac6;
+          "></div>
+          <button onclick="copySummary()" style="background-color: #03dac6; color: #1e1e1e;">Copy Summary</button>
+          <hr style="border: 0; border-top: 1px solid #2c3e50; margin: 15px 0" />
+        </div>
         <div class="result">
           <div id="selectedOffences" style="margin-bottom: 10px">
             <h4 style="margin: 0 0 8px">Selected Offenses:</h4>
@@ -57,6 +72,16 @@
       window.onload = () => {
         initOffences();
       };
+      
+      // FUNGSI BARU: Menyalin Ringkasan
+      function copySummary() {
+        const copyText = document.getElementById("copyableList").innerText;
+        navigator.clipboard.writeText(copyText).then(() => {
+          alert("Summary berhasil disalin ke clipboard!");
+        }).catch(err => {
+          console.error('Gagal menyalin: ', err);
+        });
+      }
     </script>
   </body>
 </html>
