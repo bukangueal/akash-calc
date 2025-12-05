@@ -1,4 +1,17 @@
-<button onclick="resetCalculator()">Reset Calculator</button>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-initial-scale=1.0" />
+    <title>Monarch State Criminal Code</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Monarch State Criminal Code</h1>
+      <div id="calculator" class="tab-content active">
+        <div id="offence-list"></div>
+        <button onclick="resetCalculator()">Reset Calculator</button><button onclick="resetCalculator()">Reset Calculator</button>
 
         <div id="copy-panel" style="margin-top: 20px; display: none;">
           <h4 style="margin: 0 0 10px; color: #bb86fc;">Copyable Summary:</h4>
@@ -15,38 +28,60 @@
           <button onclick="copySummary()" style="background-color: #03dac6; color: #1e1e1e;">Copy Summary</button>
           <hr style="border: 0; border-top: 1px solid #2c3e50; margin: 15px 0" />
         </div>
-
         <div class="result">
-          ```
+          <div id="selectedOffences" style="margin-bottom: 10px">
+            <h4 style="margin: 0 0 8px">Selected Offenses:</h4>
+            <ul
+              id="offenceList"
+              style="
+                list-style: none;
+                padding-left: 10px;
+                margin: 0;
+                color: #ccc;
+              "
+            >
+              <li style="color: #666">No offenses selected</li>
+            </ul>
+            <hr
+              style="border: 0; border-top: 1px solid #2c3e50; margin: 8px 0"
+            />
+          </div>
 
----
+          <p><b>Total Fine:</b> <span id="totalFine">$0</span></p>
+          <p><b>Total Jail Time:</b> <span id="totalTime">0 months</span></p>
+          <p><b>Total Impound:</b> <span id="totalImpound">0 days</span></p>
+        </div>
+      </div>
+    </div>
 
-## 2. 📝 Pastikan Logika JavaScript Sudah Benar
+    <script src="script.js"></script>
+    <script>
+      function openTab(tabId) {
+        document
+          .querySelectorAll(".tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+        document
+          .querySelector(`.tab[onclick="openTab('${tabId}')"]`)
+          .classList.add("active");
+        document.getElementById(tabId).classList.add("active");
+      }
 
-Logika untuk menampilkan dan mengisi panel ada di fungsi **`updateTotals()`** dan **`resetCalculator()`** di file **`script.js`**.
-
-Pastikan bagian-bagian ini sudah Anda perbarui dengan tepat di **`script.js`**:
-
-### A. Di `updateTotals()`:
-
-Kode ini yang bertanggung jawab untuk menampilkan panel:
-
-```javascript
-  // ... (bagian atas fungsi updateTotals)
-
-  if (selectedOffences.length > 0) {
-    // ... (kode untuk mengisi offenceList)
-
-    // INI YANG PALING PENTING: Menampilkan panel copy
-    document.getElementById("copy-panel").style.display = 'block';
-  } else {
-    // ... (kode jika tidak ada yang dipilih)
-
-    // Menyembunyikan panel copy jika tidak ada yang dipilih
-    document.getElementById("copy-panel").style.display = 'none';
-  }
-
-  // 3. UPDATE KONTEN YANG DAPAT DISALIN
-  const copyableText = copyableSummaryArray.join('\n');
-  document.getElementById("copyableList").innerText = copyableText;
-}
+      window.onload = () => {
+        initOffences();
+      };
+      
+      // FUNGSI BARU: Menyalin Ringkasan
+      function copySummary() {
+        const copyText = document.getElementById("copyableList").innerText;
+        navigator.clipboard.writeText(copyText).then(() => {
+          alert("Summary berhasil disalin ke clipboard!");
+        }).catch(err => {
+          console.error('Gagal menyalin: ', err);
+        });
+      }
+    </script>
+  </body>
+</html>
