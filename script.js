@@ -5,12 +5,10 @@ const offenceHeadlines = {
   D: "Article D - Narcotics",
   E: "Article E - Weapons & Contraband",
   F: "Article F - Major Crimes & Terrorism",
-  // G: "Article G - Sexual Crimes",
 };
 
 const offences = {
   A: [
-    // Article A = Traffic Offenses (formerly B)
     {
       name: "A01 - Driving without a valid License",
       fine: 1300,
@@ -93,7 +91,6 @@ const offences = {
   ],
 
   B: [
-    // Article B = General Violations (formerly A)
     { name: "B01 - Minor Assault", fine: 2000, time: 10, impound: 0 },
     { name: "B02 - Spitting in Public", fine: 1000, time: 5, impound: 0 },
     {
@@ -401,30 +398,8 @@ const offences = {
       impound: 0,
     },
   ],
-
-  // G: [
-  //   {
-  //     name: "G01 - Sexual Harassment",
-  //     fine: 15000,
-  //     time: 120,
-  //     impound: 0,
-  //   },
-  //   {
-  //     name: "G02 - Rape",
-  //     fine: 15000,
-  //     time: 120,
-  //     impound: 0,
-  //   },
-  //   {
-  //     name: "G03 - Sexual Exploitation",
-  //     fine: 15000,
-  //     time: 120,
-  //     impound: 0,
-  //   },
-  // ],
 };
 
-// Stores the checkbox status for each category
 let checkedState = { A: [], B: [], C: [], D: [], E: [], F: []};
 
 function initOffences() {
@@ -449,21 +424,18 @@ function initOffences() {
       const div = document.createElement("div");
       div.className = "offence";
 
-      // 🧩 Detect offenses E02-3, F07, F08 for potential Court Case
       const isCourtCase =
         o.name.startsWith("E02-3") ||
         o.name.startsWith("F07") ||
         o.name.startsWith("F08");
 
       if (isCourtCase) {
-        // Display without checkbox and fine info
         div.innerHTML = `
           <label style="color: #f51800f5; font-weight: 800;">
             ${o.name} <span style="color:#f51800f5;">(Potential Court Case)</span>
           </label>
         `;
       } else {
-        // Normal case (with checkbox and info)
         div.innerHTML = `
           <label>
             <input type="checkbox"
@@ -482,7 +454,6 @@ function initOffences() {
       content.appendChild(div);
     });
 
-    // 🧩 Collapse/Expand category event
     header.addEventListener("click", () => {
       const active = content.classList.toggle("active");
       header.querySelector(".arrow").style.transform = active
@@ -497,13 +468,9 @@ function initOffences() {
 }
 
 
-
-
-// Event listener for expanding/collapsing the header
 header.addEventListener("click", () => {
   const active = content.classList.contains("active");
 
-  // Close all others (optional for single open category)
   document.querySelectorAll(".offence-content.active").forEach((open) => {
     if (open !== content) {
       open.classList.remove("active");
@@ -518,7 +485,6 @@ header.addEventListener("click", () => {
     content.style.maxHeight = content.scrollHeight + "px";
     header.querySelector(".arrow").style.transform = "rotate(180deg)";
 
-    // Auto-scroll to keep the header visible
     setTimeout(() => {
       header.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 300);
@@ -529,17 +495,14 @@ header.addEventListener("click", () => {
   }
 });
 
-// 🧮 UPDATE CHECKBOX STATE
 function updateState(checkbox) {
   const cat = checkbox.dataset.category;
   const index = checkbox.dataset.index;
-  // Initialize array if null
   if (!checkedState[cat]) checkedState[cat] = [];
   checkedState[cat][index] = checkbox.checked;
   updateTotals();
 }
 
-// 🧾 CALCULATE TOTAL FINE, JAIL TIME, IMPOUND
 function updateTotals() {
   let totalFine = 0;
   let totalTime = 0;
@@ -548,7 +511,6 @@ function updateTotals() {
 
   Object.keys(offences).forEach((cat) => {
     offences[cat].forEach((o, index) => {
-      // Check if the item is selected and not a court case (court cases are handled separately)
       if (checkedState[cat][index] && o.fine !== 0 && o.time !== 120 && !o.name.startsWith("E02-3") && !o.name.startsWith("F07") && !o.name.startsWith("F08")) {
         totalFine += o.fine;
         totalTime += o.time;
@@ -559,7 +521,6 @@ function updateTotals() {
           name: o.name,
         });
       } else if (checkedState[cat][index] && (o.name.startsWith("E02-3") || o.name.startsWith("F07") || o.name.startsWith("F08"))) {
-        // Add court cases to the list of selected offenses
         selectedOffences.push({
           article: cat,
           name: o.name,
@@ -569,14 +530,12 @@ function updateTotals() {
     });
   });
 
-  // Update total
   document.getElementById(
     "totalFine"
   ).innerText = `$${totalFine.toLocaleString()}`;
   document.getElementById("totalTime").innerText = `${totalTime} months`;
   document.getElementById("totalImpound").innerText = `${totalImpound} days`;
 
-  // Update list of offenses
   const offenceList = document.getElementById("offenceList");
   offenceList.innerHTML = "";
 
@@ -594,24 +553,19 @@ function updateTotals() {
   }
 }
 
-// ♻️ RESET ALL CHECKBOXES & TOTALS
 function resetCalculator() {
-  // Clear all selected data
   Object.keys(checkedState).forEach((cat) => {
     checkedState[cat] = [];
   });
 
-  // Uncheck all checkboxes
   document.querySelectorAll("input[type='checkbox']").forEach((cb) => {
     cb.checked = false;
   });
 
-  // Reset totals
   document.getElementById("totalFine").innerText = "$0";
   document.getElementById("totalTime").innerText = "0 months";
   document.getElementById("totalImpound").innerText = "0 days";
 
-  // Clear selected offenses list
   const offenceList = document.getElementById("offenceList");
   offenceList.innerHTML =
     '<li style="color:#666;">No offenses selected</li>';
