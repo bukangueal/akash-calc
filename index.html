@@ -15,7 +15,7 @@
 
         <div id="copy-panel" class="copy-panel" style="display: none;">
           <h4>Copyable Summary:</h4>
-          <div id="copyableList"></div>
+          <div id="copyableList"></div> 
           <button onclick="copySummary()" class="copy-button">Copy Summary</button>
           <hr />
         </div>
@@ -37,23 +37,6 @@
 
     <script src="script.js"></script>
     <script>
-      function openTab(tabId) {
-        document
-          .querySelectorAll(".tab")
-          .forEach((tab) => tab.classList.remove("active"));
-        document
-          .querySelectorAll(".tab-content")
-          .forEach((content) => content.classList.remove("active"));
-        document
-          .querySelector(`.tab[onclick="openTab('${tabId}')"]`)
-          .classList.add("active");
-        document.getElementById(tabId).classList.add("active");
-      }
-
-      window.onload = () => {
-        initOffences();
-      };
-      
       function copySummary() {
         const copyText = document.getElementById("copyableList").innerText;
         navigator.clipboard.writeText(copyText).then(() => {
@@ -62,6 +45,10 @@
           console.error('Gagal menyalin: ', err);
         });
       }
+
+      window.onload = () => {
+        initOffences();
+      };
     </script>
   </body>
 </html>
