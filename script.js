@@ -501,8 +501,8 @@ function updateTotals() {
   let totalImpound = 0;
   const selectedOffences = [];
   
-  // Array baru yang hanya menyimpan kode (A01) dan detailnya
-  const summaryCodesAndDetails = []; 
+  // Array baru yang hanya menyimpan kode pelanggaran yang dipilih (e.g., ['A01', 'F03'])
+  const selectedOffenceCodes = [];
 
   Object.keys(offences).forEach((cat) => {
     offences[cat].forEach((o, index) => {
@@ -510,44 +510,32 @@ function updateTotals() {
       const offenceCodeMatch = o.name.match(/([A-Z0-9-]+)/);
       const offenceCode = offenceCodeMatch ? offenceCodeMatch[1] : o.name;
 
-      if (
-        checkedState[cat][index] &&
-        !o.name.includes("Court Case")
-      ) {
-        // Logika untuk Offenses yang tidak Court Case
-        if (o.fine !== 0 || o.time !== 120) {
-            totalFine += o.fine;
-            totalTime += o.time;
-            totalImpound += o.impound;
+      if (checkedState[cat][index]) {
+        if (!o.name.includes("Court Case")) {
+          // Logika untuk Offenses yang dikenakan Fine/Time/Impound
+          totalFine += o.fine;
+          totalTime += o.time;
+          totalImpound += o.impound;
 
-            selectedOffences.push({
-                article: cat,
-                name: o.name,
-                isCourtCase: false,
-            });
-
-            // Hanya masukkan kode dan detail ke ringkasan salinan
-            summaryCodesAndDetails.push(
-                `${offenceCode} - Fine: $${o.fine.toLocaleString()} - Time: ${o.time} months - Impound: ${o.impound} days`
-            );
+          selectedOffences.push({
+            article: cat,
+            name: o.name,
+            isCourtCase: false,
+          });
+          
+          // Masukkan kode ke array untuk ringkasan
+          selectedOffenceCodes.push(offenceCode);
+        } else {
+          // Logika untuk Court Case (F07, F08, E02-3)
+          selectedOffences.push({
+            article: cat,
+            name: o.name,
+            isCourtCase: true,
+          });
+          
+          // Masukkan kode Court Case dengan penanda khusus
+          selectedOffenceCodes.push(`${offenceCode} (COURT: ${o.time}m)`);
         }
-      } else if (
-        checkedState[cat][index] &&
-        (o.name.startsWith("E02-3") ||
-          o.name.startsWith("F07") ||
-          o.name.startsWith("F08"))
-      ) {
-        // Logika untuk Court Case
-        selectedOffences.push({
-          article: cat,
-          name: o.name,
-          isCourtCase: true,
-        });
-        
-        // Masukkan Court Case dengan format khusus
-        summaryCodesAndDetails.push(
-            `${offenceCode} - POTENTIAL COURT CASE (Time: ${o.time} months)`
-        );
       }
     });
   });
@@ -577,16 +565,16 @@ function updateTotals() {
     document.getElementById("copy-panel").style.display = 'none';
   }
 
-  // 3. UPDATE KONTEN YANG DAPAT DISALIN
-  // Tambahkan Total di bagian bawah ringkasan
-  if (totalFine > 0 || totalTime > 0 || totalImpound > 0) {
-    summaryCodesAndDetails.push(`\n---`);
-    summaryCodesAndDetails.push(`Total Fine: $${totalFine.toLocaleString()}`);
-    summaryCodesAndDetails.push(`Total Jail: ${totalTime} months`);
-    summaryCodesAndDetails.push(`Total Impound: ${totalImpound} days`);
-  }
+  // 3. UPDATE KONTEN YANG DAPAT DISALIN (RINGKAS)
+  let copyableText = '';
 
-  const copyableText = summaryCodesAndDetails.join('\n');
+  if (selectedOffenceCodes.length > 0) {
+    const codesString = selectedOffenceCodes.join(', ');
+    
+    // Format yang Anda minta: "F01, F03 - 6000 - 27 months - 2 days impound"
+    copyableText = `${codesString} - $${totalFine.toLocaleString()} - ${totalTime} months - ${totalImpound} days impound`;
+  }
+  
   document.getElementById("copyableList").innerText = copyableText;
 }
 
