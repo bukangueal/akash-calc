@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monarch State Criminal Code</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Monarch State Criminal Code</h1>
+      <!-- 
+      <div class="tabs">
+        <div class="tab active" onclick="openTab('calculator')"></div>
+        <div class="tab" onclick="openTab('sop')">SOP</div> 
+        <div class="tab" onclick="openTab('rules')">Rules UUD</div>
+      </div> -->
+
+      <div id="calculator" class="tab-content active">
+        <div id="offence-list"></div>
+        <button onclick="resetCalculator()">Reset</button>
+
+        <div class="result">
+          <div id="selectedOffences" style="margin-bottom: 10px">
+            <h4 style="margin: 0 0 8px">Pelanggaran yang Dipilih:</h4>
+            <ul
+              id="offenceList"
+              style="
+                list-style: none;
+                padding-left: 10px;
+                margin: 0;
+                color: #ccc;
+              "
+            ></ul>
+            <hr
+              style="border: 0; border-top: 1px solid #2c3e50; margin: 8px 0"
+            />
+          </div>
+
+          <p><b>Total Denda:</b> <span id="totalFine">$0</span></p>
+          <p><b>Total Penjara:</b> <span id="totalTime">0 bulan</span></p>
+          <p><b>Total Impound:</b> <span id="totalImpound">0 Hari</span></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      function openTab(tabId) {
+        document
+          .querySelectorAll(".tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+        document
+          .querySelector(`.tab[onclick="openTab('${tabId}')"]`)
+          .classList.add("active");
+        document.getElementById(tabId).classList.add("active");
+      }
+
+      // 🔥 Tambahkan ini biar isi pasal muncul
+      window.onload = () => {
+        initOffences();
+      };
+    </script>
+  </body>
+</html>
