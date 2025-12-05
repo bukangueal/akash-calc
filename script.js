@@ -500,10 +500,16 @@ function updateTotals() {
   let totalTime = 0;
   let totalImpound = 0;
   const selectedOffences = [];
-  const copyableSummaryArray = [];
+  
+  // Array baru yang hanya menyimpan kode (A01) dan detailnya
+  const summaryCodesAndDetails = []; 
 
   Object.keys(offences).forEach((cat) => {
     offences[cat].forEach((o, index) => {
+      // Ambil hanya kode pelanggaran (misalnya "A01" dari "A01 - Driving...")
+      const offenceCodeMatch = o.name.match(/([A-Z0-9-]+)/);
+      const offenceCode = offenceCodeMatch ? offenceCodeMatch[1] : o.name;
+
       if (
         checkedState[cat][index] &&
         !o.name.includes("Court Case")
@@ -520,9 +526,9 @@ function updateTotals() {
                 isCourtCase: false,
             });
 
-            // Tambahkan ke ringkasan yang dapat disalin
-            copyableSummaryArray.push(
-                `${o.name} - Fine: $${o.fine.toLocaleString()} - Time: ${o.time} months - Impound: ${o.impound} days`
+            // Hanya masukkan kode dan detail ke ringkasan salinan
+            summaryCodesAndDetails.push(
+                `${offenceCode} - Fine: $${o.fine.toLocaleString()} - Time: ${o.time} months - Impound: ${o.impound} days`
             );
         }
       } else if (
@@ -538,20 +544,20 @@ function updateTotals() {
           isCourtCase: true,
         });
         
-        // Tambahkan Court Case ke ringkasan dengan label khusus
-        copyableSummaryArray.push(
-            `${o.name} - POTENTIAL COURT CASE (Time: ${o.time} months)`
+        // Masukkan Court Case dengan format khusus
+        summaryCodesAndDetails.push(
+            `${offenceCode} - POTENTIAL COURT CASE (Time: ${o.time} months)`
         );
       }
     });
   });
 
-  // UPDATE HASIL TOTAL
+  // 1. UPDATE HASIL TOTAL
   document.getElementById("totalFine").innerText = `$${totalFine.toLocaleString()}`;
   document.getElementById("totalTime").innerText = `${totalTime} months`;
   document.getElementById("totalImpound").innerText = `${totalImpound} days`;
 
-  // UPDATE DAFTAR PELANGGARAN TERPILIH (di bagian Result)
+  // 2. UPDATE DAFTAR PELANGGARAN TERPILIH (di bagian Result)
   const offenceList = document.getElementById("offenceList");
   offenceList.innerHTML = "";
 
@@ -571,8 +577,16 @@ function updateTotals() {
     document.getElementById("copy-panel").style.display = 'none';
   }
 
-  // UPDATE KONTEN YANG DAPAT DISALIN
-  const copyableText = copyableSummaryArray.join('\n');
+  // 3. UPDATE KONTEN YANG DAPAT DISALIN
+  // Tambahkan Total di bagian bawah ringkasan
+  if (totalFine > 0 || totalTime > 0 || totalImpound > 0) {
+    summaryCodesAndDetails.push(`\n---`);
+    summaryCodesAndDetails.push(`Total Fine: $${totalFine.toLocaleString()}`);
+    summaryCodesAndDetails.push(`Total Jail: ${totalTime} months`);
+    summaryCodesAndDetails.push(`Total Impound: ${totalImpound} days`);
+  }
+
+  const copyableText = summaryCodesAndDetails.join('\n');
   document.getElementById("copyableList").innerText = copyableText;
 }
 
